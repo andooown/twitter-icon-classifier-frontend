@@ -10,27 +10,22 @@
           (正方形の画像のほうが正しく診断できます)
         </p>
 
-        <b-progress id="progress-bar" :max="100" show-progress animated>
-          <b-progress-bar :value="100">モデル読み込み中.....</b-progress-bar>
+        <b-progress v-if="progressText != null && progressText !== ''" id="progress-bar" :max="100" show-progress animated>
+          <b-progress-bar :value="100">{{ progressText }}</b-progress-bar>
         </b-progress>
 
-        <b-input-group>
-          <b-form-input v-model="screenName" type="text" placeholder="ID検索"></b-form-input>
-          <b-button variant="outline-primary">検索</b-button>
-        </b-input-group>
-        または<br />
-        <b-button variant="outline-primary">画像アップロード</b-button>
+        <b-alert v-if="alertText != null && alertText !== ''" variant="danger" show>{{ alertText }}</b-alert>
 
-        <b-button size="lg" variant="primary">診断する</b-button>
+        <ImageSelectForm v-if="!isImageLoaded" :screen-name="screenName" @update-image-data="updateImageData" @show-progress="showProgress" @hide-progress="hideProgress" @show-alert="showAlert" @hide-alert="hideAlert" />
+
+        <b-button v-if="isImageLoaded" size="lg" variant="primary">診断する</b-button>
 
         <h2>陽キャ度: <strong>{{ result.score | fixedText(2) }}</strong></h2>
         <div class="h3">{{ result.description }}</div>
         <b-button variant="primary">結果をつぶやく</b-button>
         <b-button variant="outline-primary">もう一度診断する</b-button>
 
-        <b-alert variant="danger" show fade>テスト</b-alert>
-
-        <b-img src="https://placehold.jp/500x500.png?text=%E7%94%BB%E5%83%8F" fluid></b-img>
+        <b-img :src="image" fluid></b-img>
       </div>
     </b-container>
   </div>
@@ -38,25 +33,63 @@
 
 <script>
 import Navbar from "./components/Navbar.vue";
+import ImageSelectForm from "./components/ImageSelectForm";
 
 export default {
   name: "app",
   components: {
-    Navbar
+    Navbar,
+    ImageSelectForm
+  },
+  data() {
+    return {
+      screenName: "",
+      image: "https://placehold.jp/500x500.png?text=%E7%94%BB%E5%83%8F",
+      isImageLoaded: false,
+
+      result: {
+        score: 0,
+        description: ""
+      },
+
+      progressText: "",
+      alertText: ""
+    };
+  },
+  mounted() {
+    this.progressText = "モデル読み込み中.....";
+  },
+  methods: {
+    updateImageData(imageData, screenName = "") {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.image = reader.result;
+        this.isImageLoaded = true;
+        this.screenName = screenName;
+
+        this.hideAlert();
+      };
+      reader.readAsDataURL(imageData);
+    },
+
+    showProgress(text) {
+      this.progressText = text;
+    },
+    hideProgress() {
+      this.progressText = "";
+    },
+
+    showAlert(text) {
+      this.alertText = text;
+    },
+    hideAlert() {
+      this.alertText = "";
+    }
   },
   filters: {
     fixedText(val, num) {
       return (val * 100.0).toFixed(num) + "%";
     }
-  },
-  data() {
-    return {
-      screenName: "",
-      result: {
-        score: 0,
-        description: ""
-      }
-    };
   }
 };
 </script>
