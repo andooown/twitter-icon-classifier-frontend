@@ -105,7 +105,7 @@ export default {
       this.loadImageData(file);
     },
     async classify() {
-      await this.$store.dispatch("updateClassifyInput", this.image, this.screenName);
+      await this.$store.dispatch("updateClassifyInput", { image: this.image, screenName: this.screenName });
       this.$router.replace("result");
     }
   }
