@@ -13,7 +13,7 @@ export default {
 <style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: 1s;
+  transition: 0.5s;
 }
 
 .fade-enter,
