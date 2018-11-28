@@ -45,11 +45,6 @@ export default {
     };
   },
   async mounted() {
-    if (!this.isModelLoaded) {
-      this.$router.replace("");
-      return;
-    }
-
     try {
       const inputArray = await WebDNN.Image.getImageArray(this.image, { dstW: 224, dstH: 224 });
       this.runner.inputs[0].set(inputArray);

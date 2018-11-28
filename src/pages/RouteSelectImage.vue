@@ -63,11 +63,6 @@ export default {
       return this.screenName !== "";
     }
   },
-  mounted() {
-    if (!this.isModelLoaded) {
-      this.$router.replace("");
-    }
-  },
   methods: {
     loadImageData(imageData) {
       const reader = new FileReader();
