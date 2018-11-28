@@ -8,7 +8,7 @@
       <div v-else>
         <b-row>
           <b-col>
-            <h2>陽キャ度: <strong>{{ score | fixedText(2) }}%</strong></h2>
+            <h2>陽キャ度: <strong>{{ scoreText }}</strong></h2>
           </b-col>
         </b-row>
         <b-row>
@@ -67,6 +67,12 @@ export default {
     ...mapState(["runner", "image", "screenName"]),
     ...mapGetters(["isModelLoaded"]),
 
+    scoreText() {
+      if (this.score == null) {
+        return "";
+      }
+      return `${(this.score * 100.0).toFixed(2)}%`;
+    },
     descriptionText() {
       if (this.score == null) {
         return "";
@@ -89,16 +95,11 @@ export default {
       }
     },
     tweetUrl() {
-      let text = `${this.descriptionText}です。陽キャ度: ${this.score.toFixed(2)}% | 機械学習でTwitterアイコンを陽キャ・陰キャ診断`;
+      let text = `${this.descriptionText}です。陽キャ度: ${this.scoreText} | 機械学習でTwitterアイコンを陽キャ・陰キャ診断`;
       if (this.screenName != null && this.screenName !== "") {
         text = `@${this.screenName} さんは${text}`;
       }
       return `https://twitter.com/intent/tweet?text=${encodeURI(text)}&url=https://andooown.com/app/twitter-icon-classifier/&hashtags=陽キャ陰キャ診断`;
-    }
-  },
-  filters: {
-    fixedText(val, num) {
-      return (val * 100.0).toFixed(num);
     }
   }
 };
