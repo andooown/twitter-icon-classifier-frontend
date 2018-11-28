@@ -46,7 +46,7 @@ export default {
   },
   async mounted() {
     try {
-      const inputArray = await WebDNN.Image.getImageArray(this.image, { dstW: 224, dstH: 224 });
+      const inputArray = await WebDNN.Image.getImageArray(this.image, { dstW: 224, dstH: 224, scale: [255, 255, 255] });
       this.runner.inputs[0].set(inputArray);
 
       await this.runner.run();
