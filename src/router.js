@@ -9,8 +9,19 @@ import RouteResult from "./pages/RouteResult.vue";
 
 export default new VueRouter({
   routes: [
-    { path: "/", component: RouteLoadModel },
-    { path: "/select", component: RouteSelectImage },
-    { path: "/result", component: RouteResult }
+    {
+      path: "/",
+      component: RouteLoadModel
+    },
+    {
+      path: "/select",
+      component: RouteSelectImage,
+      meta: { requiresModel: true }
+    },
+    {
+      path: "/result",
+      component: RouteResult,
+      meta: { requiresModel: true }
+    }
   ]
 });
