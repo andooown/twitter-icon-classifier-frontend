@@ -7,10 +7,10 @@ export default new Vuex.Store({
   state: {
     runner: null,
     image: "",
-    screenName: "",
+    screenName: ""
   },
   getters: {
-    isModelLoaded: (state) => (state.runner != null)
+    isModelLoaded: state => state.runner != null
   },
   mutations: {
     updateRunner: (state, payload) => (state.runner = payload.runner),
