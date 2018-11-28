@@ -18,7 +18,7 @@
         </b-row>
         <b-row class="my-2">
           <b-col>
-            <b-button variant="primary" class="mr-2">結果をつぶやく</b-button>
+            <b-button :href="tweetUrl" variant="primary" class="mr-2">結果をつぶやく</b-button>
             <b-button @click="reloadPage" variant="outline-primary" class="ml-2">もう一度診断する</b-button>
           </b-col>
         </b-row>
@@ -87,6 +87,13 @@ export default {
       } else {
         return "めっちゃ陽キャ(ｳｪｲｳｪｲ↑";
       }
+    },
+    tweetUrl() {
+      let text = `${this.descriptionText}です。陽キャ度: ${this.score.toFixed(2)}% | 機械学習でTwitterアイコンを陽キャ・陰キャ診断`;
+      if (this.screenName != null && this.screenName !== "") {
+        text = `@${this.screenName} さんは${text}`;
+      }
+      return `https://twitter.com/intent/tweet?text=${encodeURI(text)}&url=https://andooown.com/app/twitter-icon-classifier/&hashtags=陽キャ陰キャ診断`;
     }
   },
   filters: {
