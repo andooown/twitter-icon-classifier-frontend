@@ -34,11 +34,13 @@
       </b-row>
     </transition>
 
-    <b-row>
-      <b-col>
-        <b-img :src="image" fluid></b-img>
-      </b-col>
-    </b-row>
+    <transition name="fade" appear>
+      <b-row v-if="image != null && image !== ''">
+        <b-col>
+          <b-img :src="image" fluid></b-img>
+        </b-col>
+      </b-row>
+    </transition>
   </div>
 </template>
 
@@ -113,6 +115,10 @@ export default {
 </script>
 
 <style scoped>
+#image-selection-row {
+  height: 100px;
+}
+
 #progress-bar {
   height: 30px;
 }
