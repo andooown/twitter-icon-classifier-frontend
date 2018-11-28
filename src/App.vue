@@ -1,101 +1,84 @@
 <template>
   <div id="app">
-    <Navbar />
+    <b-row id="image-selection-row" align-v="center">
+      <b-col>
+        <transition name="fade" mode="out-in">
+          <b-progress v-if="progressText != null && progressText !== ''" id="progress-bar" :max="100" show-progress animated>
+            <b-progress-bar :value="100">{{ progressText }}</b-progress-bar>
+          </b-progress>
+          <ImageSelectForm v-if="isModelLoaded && !isImageLoading && result == null" :screen-name="screenName" :is-icon-loading="isImageLoading" />
+        </transition>
+      </b-col>
+    </b-row>
 
-    <b-container>
-      <div class="mt-5 text-center">
-        <h1 class="display-4">陽キャ・陰キャ診断</h1>
-        <p>
-          機械学習を使ってTwitterアイコンなどの画像をもとに陽キャ・陰キャ診断ができます。<br>
-          (正方形の画像のほうが正しく診断できます)
-        </p>
+    <transition name="fade" appear>
+      <b-row v-if="!isImageLoading && image !== '' && result == null" id="execute-button-row" class="my-2" align-v="center">
+        <b-col>
+          <b-button @click="classify" size="lg" variant="primary">診断する</b-button>
+        </b-col>
+      </b-row>
+    </transition>
 
-        <b-progress v-if="progressText != null && progressText !== ''" id="progress-bar" :max="100" show-progress animated>
-          <b-progress-bar :value="100">{{ progressText }}</b-progress-bar>
-        </b-progress>
+    <Result v-if="result != null" />
 
-        <b-alert v-if="alertText != null && alertText !== ''" variant="danger" show>{{ alertText }}</b-alert>
+    <transition name="fade" appear>
+      <b-alert v-if="alertText != null && alertText !== ''" variant="danger" class="my-2" show>{{ alertText }}</b-alert>
+    </transition>
 
-        <ImageSelectForm v-if="!isImageLoaded" :screen-name="screenName" @update-image-data="updateImageData" @show-progress="showProgress" @hide-progress="hideProgress" @show-alert="showAlert" @hide-alert="hideAlert" />
-
-        <b-button v-if="isImageLoaded" size="lg" variant="primary">診断する</b-button>
-
-        <h2>陽キャ度: <strong>{{ result.score | fixedText(2) }}</strong></h2>
-        <div class="h3">{{ result.description }}</div>
-        <b-button variant="primary">結果をつぶやく</b-button>
-        <b-button variant="outline-primary">もう一度診断する</b-button>
-
-        <b-img :src="image" fluid></b-img>
-      </div>
-    </b-container>
+    <transition name="fade" appear>
+      <b-img :src="image" fluid></b-img>
+    </transition>
   </div>
 </template>
 
 <script>
-import Navbar from "./components/Navbar.vue";
-import ImageSelectForm from "./components/ImageSelectForm";
+import { mapState, mapGetters, mapActions } from "vuex";
+
+import ImageSelectForm from "./components/ImageSelectForm.vue";
+import Result from "./components/Result.vue";
 
 export default {
   name: "app",
   components: {
-    Navbar,
-    ImageSelectForm
+    ImageSelectForm,
+    Result
   },
-  data() {
-    return {
-      screenName: "",
-      image: "https://placehold.jp/500x500.png?text=%E7%94%BB%E5%83%8F",
-      isImageLoaded: false,
-
-      result: {
-        score: 0,
-        description: ""
-      },
-
-      progressText: "",
-      alertText: ""
-    };
-  },
-  mounted() {
-    this.progressText = "モデル読み込み中.....";
+  async mounted() {
+    await this.$store.dispatch("loadModel");
   },
   methods: {
-    updateImageData(imageData, screenName = "") {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.image = reader.result;
-        this.isImageLoaded = true;
-        this.screenName = screenName;
-
-        this.hideAlert();
-      };
-      reader.readAsDataURL(imageData);
-    },
-
-    showProgress(text) {
-      this.progressText = text;
-    },
-    hideProgress() {
-      this.progressText = "";
-    },
-
-    showAlert(text) {
-      this.alertText = text;
-    },
-    hideAlert() {
-      this.alertText = "";
-    }
+    ...mapActions(["classify"])
   },
-  filters: {
-    fixedText(val, num) {
-      return (val * 100.0).toFixed(num) + "%";
-    }
+  computed: {
+    ...mapState(["screenName", "image", "isImageLoading", "result", "progressText", "alertText"]),
+    ...mapGetters(["isModelLoaded"])
   }
 };
 </script>
 
 <style>
+#image-selection-row {
+  height: 100px;
+}
+#execute-button-row {
+  height: 50px;
+}
+
 #progress-bar {
   height: 30px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 1s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave {
+  opacity: 1;
 }
 </style>
