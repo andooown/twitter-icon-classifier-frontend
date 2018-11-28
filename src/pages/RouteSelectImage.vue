@@ -19,16 +19,26 @@
     </b-row>
 
     <transition name="fade" appear>
-      <b-button v-if="!isImageLoading && image !== ''" @click="classify" size="lg" variant="primary" class="my-2">診断する</b-button>
+      <b-row v-if="!isImageLoading && image !== ''">
+        <b-col>
+          <b-button @click="classify" size="lg" variant="primary" class="my-2">診断する</b-button>
+        </b-col>
+      </b-row>
     </transition>
 
     <transition name="fade" appear>
-      <b-alert v-if="alertText != null && alertText !== ''" variant="danger" class="my-2" show>{{ alertText }}</b-alert>
+      <b-row v-if="alertText != null && alertText !== ''">
+        <b-col>
+          <b-alert variant="danger" class="my-2" show>{{ alertText }}</b-alert>
+        </b-col>
+      </b-row>
     </transition>
 
-    <transition name="fade" appear>
-      <b-img :src="image" fluid></b-img>
-    </transition>
+    <b-row>
+      <b-col>
+        <b-img :src="image" fluid></b-img>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -51,11 +61,6 @@ export default {
 
     isValidScreenName() {
       return this.screenName !== "";
-    }
-  },
-  mounted() {
-    if (!this.isModelLoaded) {
-      this.$router.replace("");
     }
   },
   methods: {

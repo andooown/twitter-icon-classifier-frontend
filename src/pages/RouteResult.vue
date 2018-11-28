@@ -18,10 +18,8 @@
         </b-row>
         <b-row class="my-2">
           <b-col>
-            <b-button variant="primary">結果をつぶやく</b-button>
-          </b-col>
-          <b-col>
-            <b-button @click="reloadPage" variant="outline-primary">もう一度診断する</b-button>
+            <b-button variant="primary" class="mr-2">結果をつぶやく</b-button>
+            <b-button @click="reloadPage" variant="outline-primary" class="ml-2">もう一度診断する</b-button>
           </b-col>
         </b-row>
         <b-row>
@@ -47,11 +45,6 @@ export default {
     };
   },
   async mounted() {
-    if (!this.isModelLoaded) {
-      this.$router.replace("");
-      return;
-    }
-
     try {
       const inputArray = await WebDNN.Image.getImageArray(this.image, { dstW: 224, dstH: 224 });
       this.runner.inputs[0].set(inputArray);
