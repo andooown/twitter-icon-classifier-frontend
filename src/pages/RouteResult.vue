@@ -8,7 +8,7 @@
       <div v-else>
         <b-row>
           <b-col>
-            <h2>陽キャ度: <strong>{{ score | fixedText(2) }}%</strong></h2>
+            <h2>陽キャ度: <strong>{{ scoreText }}</strong></h2>
           </b-col>
         </b-row>
         <b-row>
@@ -95,7 +95,7 @@ export default {
       }
     },
     tweetUrl() {
-      let text = `${this.descriptionText}です。陽キャ度: ${this.score.toFixed(2)}% | 機械学習でTwitterアイコンを陽キャ・陰キャ診断`;
+      let text = `${this.descriptionText}です。陽キャ度: ${this.scoreText} | 機械学習でTwitterアイコンを陽キャ・陰キャ診断`;
       if (this.screenName != null && this.screenName !== "") {
         text = `@${this.screenName} さんは${text}`;
       }
