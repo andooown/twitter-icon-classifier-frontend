@@ -105,6 +105,7 @@ export default {
         return;
       }
       this.loadImageData(file);
+      this.screenName = "";
     },
     async classify() {
       await this.$store.dispatch("updateClassifyInput", { image: this.image, screenName: this.screenName });

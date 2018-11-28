@@ -46,7 +46,7 @@ export default {
   },
   async mounted() {
     try {
-      const inputArray = await WebDNN.Image.getImageArray(this.image, { dstW: 224, dstH: 224 });
+      const inputArray = await WebDNN.Image.getImageArray(this.image, { dstW: 224, dstH: 224, scale: [255, 255, 255] });
       this.runner.inputs[0].set(inputArray);
 
       await this.runner.run();
@@ -95,10 +95,12 @@ export default {
       }
     },
     tweetUrl() {
+      // eslint-disable-next-line
       let text = `${this.descriptionText}です。陽キャ度: ${this.scoreText} | 機械学習でTwitterアイコンを陽キャ・陰キャ診断`;
       if (this.screenName != null && this.screenName !== "") {
         text = `@${this.screenName} さんは${text}`;
       }
+      // eslint-disable-next-line
       return `https://twitter.com/intent/tweet?text=${encodeURI(text)}&url=https://andooown.com/app/twitter-icon-classifier/&hashtags=陽キャ陰キャ診断`;
     }
   }
