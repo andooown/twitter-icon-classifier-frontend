@@ -67,6 +67,12 @@ export default {
     ...mapState(["runner", "image", "screenName"]),
     ...mapGetters(["isModelLoaded"]),
 
+    scoreText() {
+      if (this.score == null) {
+        return "";
+      }
+      return `${(this.score * 100.0).toFixed(2)}%`;
+    },
     descriptionText() {
       if (this.score == null) {
         return "";
@@ -94,11 +100,6 @@ export default {
         text = `@${this.screenName} さんは${text}`;
       }
       return `https://twitter.com/intent/tweet?text=${encodeURI(text)}&url=https://andooown.com/app/twitter-icon-classifier/&hashtags=陽キャ陰キャ診断`;
-    }
-  },
-  filters: {
-    fixedText(val, num) {
-      return (val * 100.0).toFixed(num);
     }
   }
 };
