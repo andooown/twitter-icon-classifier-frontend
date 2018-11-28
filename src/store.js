@@ -19,9 +19,9 @@ export default new Vuex.Store({
   },
   actions: {
     updateRunner: ({ commit }, runner) => commit("updateRunner", { runner }),
-    updateClassifyInput: ({ commit }, image, screenName) => {
-      commit("updateImage", { image });
-      commit("updateScreenName", { screenName });
+    updateClassifyInput: ({ commit }, payload) => {
+      commit("updateImage", { image: payload.image });
+      commit("updateScreenName", { screenName: payload.screenName });
     },
     resetClassifyInput: ({ commit }) => {
       commit("updateImage", { image: "" });
