@@ -101,7 +101,7 @@ export default {
         text = `@${this.screenName} さんは${text}`;
       }
       // eslint-disable-next-line
-      return `https://twitter.com/intent/tweet?text=${encodeURI(text)}&url=https://andooown.com/app/twitter-icon-classifier/&hashtags=陽キャ陰キャ診断`;
+      return `https://twitter.com/intent/tweet?text=${encodeURI(text)}&url=https://twitter-icon-classifier.andooown.app/&hashtags=陽キャ陰キャ診断`;
     }
   }
 };
